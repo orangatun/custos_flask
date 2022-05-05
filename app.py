@@ -52,30 +52,29 @@ class Orion:
             self.admin_user_name = "orion"
             self.admin_password = "Orionrar#"
             
+            self.admin_access_token=""
+            self.refresh_token=""
+            self.admin_id_token=""
             resource_ids = []
             print("Successfully configured all custos clients")
             print(self.b64_encoded_custos_token)
         except Exception as e:
             print("Custos Id and Secret may wrong "+ str(e))
             raise e
-        try:
-            # self.verifiy_user(self.admin_user_name,self.admin_password)
-            print("Successfully verified user")
-        except Exception as e:
-            print("verifiy_user is not defined or user may not be created  in the teanant"+ str(e))
 
         try:
             self.verifiy_user(self.admin_user_name,self.admin_password)
             print("Successfully verified user")
+            print("This is nice: ", self.admin_access_token)
+
         except Exception as e:
             print("verifiy_user is not defined or user may not be created  in the teanant"+ str(e))
 
 
     def verifiy_user(self, login_user_id,login_user_password):
         print("Login user "+ login_user_id)
-        login_reponse = self.identity_management_client.token(token=self.b64_encoded_custos_token, username=login_user_id, password=login_user_password, grant_type='password')
-        login_reponse = MessageToJson(login_reponse)
-        print("Login response: ", login_reponse)
+        login_response = self.identity_management_client.token(token=self.b64_encoded_custos_token, username=login_user_id, password=login_user_password, grant_type='password')
+        login_response = json.loads(MessageToJson(login_response))
         response = self.user_management_client.get_user(token=self.b64_encoded_custos_token, username=login_user_id)
         print(" Updating user profile...  ")
         self.user_management_client.update_user_profile(
@@ -84,7 +83,10 @@ class Orion:
             email=response.email,
             first_name=response.first_name,
             last_name=response.last_name)
-        print(" User  "+ login_user_id + " successfully logged in and updated profile")
+        print(" User "+ login_user_id + " successfully logged in and updated profile")
+        self.admin_access_token = login_response['access_token']
+        self.refresh_token = login_response['refresh_token']
+        self.admin_id_token = login_response['id_token']
 
     
     def register_users(self, user):
