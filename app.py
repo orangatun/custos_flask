@@ -22,11 +22,11 @@ class Orion:
     def __init__(self):
         try :
             # read settings
-            self.client_id = 'custos-rswfydl920pg7kuvmayc-10003419'
-            custos_settings = CustosServerClientSettings(custos_host='custos.scigap.org',
-                            custos_port='31499', 
-                            custos_client_id='custos-rswfydl920pg7kuvmayc-10003419',
-                            custos_client_sec='zGDFZJpx40E0OT5EIS6WL1PZK2hHtiOs2aYFyR1y')
+            self.client_id = 'wwyHge0aG5a3IrfOYve5G9tiao2bXP1L6SNyTQgr'
+            custos_settings = CustosServerClientSettings(custos_host='js-157-10.jetstream-cloud.org',
+                            custos_port='31701', 
+                            custos_client_id='custos-pr148ambs6p1w59vwvgg-10000000',
+                            custos_client_sec='wwyHge0aG5a3IrfOYve5G9tiao2bXP1L6SNyTQgr')
 
             # create custos user management client
             self.user_management_client = UserManagementClient(custos_settings)
@@ -49,8 +49,8 @@ class Orion:
 
             self.created_groups = {}
 
-            self.admin_user_name = "anita1397@gmail.com"
-            self.admin_password = "IJR@circ@1"
+            self.admin_user_name = "orion"
+            self.admin_password = "Orionrar#"
             
             resource_ids = []
             print("Successfully configured all custos clients")
@@ -63,6 +63,13 @@ class Orion:
             print("Successfully verified user")
         except Exception as e:
             print("verifiy_user is not defined or user may not be created  in the teanant"+ str(e))
+
+        try:
+            self.verifiy_user(self.admin_user_name,self.admin_password)
+            print("Successfully verified user")
+        except Exception as e:
+            print("verifiy_user is not defined or user may not be created  in the teanant"+ str(e))
+
 
     def verifiy_user(self, login_user_id,login_user_password):
         print("Login user "+ login_user_id)
@@ -78,7 +85,8 @@ class Orion:
             first_name=response.first_name,
             last_name=response.last_name)
         print(" User  "+ login_user_id + " successfully logged in and updated profile")
-        
+
+    
     def register_users(self, user):
         try:
             resp = self.user_management_client.register_user(token=self.b64_encoded_custos_token,
